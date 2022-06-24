@@ -19,7 +19,7 @@ export class ShoppingEditComponent implements OnInit {
 
   onAddBtnClick() {
     const ingredientName = this.nameInputRef.nativeElement.value;
-    const ingredientAmount = parseInt(this.AmountInputRef.nativeElement.value) || 0;
+    const ingredientAmount = +this.AmountInputRef.nativeElement.value || 0;
     const newIngredientObj = new Ingredient(ingredientName, ingredientAmount)
     if (ingredientName === "" || ingredientAmount === 0) return alert("Sorry you have to enter a name and amount")
     this.shoppingListService.addIngredient(newIngredientObj)
