@@ -24,7 +24,7 @@
          style="cursor: pointer;"
     >
       <ul class="nav navbar-nav">
-        <li routerLinkActive="active">
+        <li routerLinkActive="active" *ngIf="isUserAuthenticated">
           <a routerLink="/recipes">
             Recipes
           </a>
@@ -34,8 +34,18 @@
             Shopping List
           </a>
         </li>
+        <li routerLinkActive="active" *ngIf="!isUserAuthenticated">
+          <a routerLink="/auth">
+            Register
+          </a>
+        </li>
       </ul>
-      <ul class="nav navbar-nav navbar-right">
+      <ul class="nav navbar-nav navbar-right" *ngIf="isUserAuthenticated">
+        <li routerLinkActive="active">
+          <a (click)='onLogout()'>
+            Logout
+          </a>
+        </li>
         <li appDropdown
             class="dropdown"
         >
@@ -50,10 +60,10 @@
             <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li>
-              <a>Save Data</a>
+              <a (click)="onSaveData()">Save Data</a>
             </li>
             <li>
-              <a>Fetch Data</a>
+              <a (click)="onFetchData()">Fetch Data</a>
             </li>
           </ul>
         </li>
