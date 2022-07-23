@@ -1,0 +1,9 @@
+.containerAlert {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 0 4rem 0;
+  border: 1px solid #333;
+  padding: 1rem 0;
+}

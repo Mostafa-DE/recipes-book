@@ -1,8 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {NgForm} from '@angular/forms';
 import {AuthResponseData, AuthService} from "./auth.service";
-import {Observable} from "rxjs";
-import { Router } from '@angular/router';
+import {Observable, Subscription} from "rxjs";
+import {Router} from '@angular/router';
+import {AlertComponent} from '../shared/alert/alert.component';
+import {PlaceholderDirective} from "../shared/placeholder/placeholder.directive";
 
 @Component({
   selector: 'app-auth',
@@ -10,12 +12,15 @@ import { Router } from '@angular/router';
   styleUrls: ['./auth.component.css']
 })
 export class AuthComponent implements OnInit {
-  isLoginMode = false;
+  isLoginMode = true;
   isThereAnError = false;
   errorMessage = "";
+  @ViewChild(PlaceholderDirective, {static: false}) alert: PlaceholderDirective;
+  closeSubscription: Subscription
 
   constructor(private authService: AuthService, private router: Router) {
   }
+
 
   ngOnInit(): void {
   }
@@ -35,10 +40,28 @@ export class AuthComponent implements OnInit {
       },
       errorMessage => {
         this.isThereAnError = true;
+        this.showErrorAlert(errorMessage);
         this.errorMessage = errorMessage;
       },
       () => {
-        form.reset();
+        // form.reset();
       });
+  }
+
+  private showErrorAlert(message: string) {
+    const viewContainerRef = this.alert.viewContainerRef;
+    viewContainerRef.clear();
+
+    const component = viewContainerRef.createComponent(AlertComponent);
+    component.instance.message = message;
+    this.closeSubscription = component.instance.onAlertClose.subscribe(() => {
+      this.closeSubscription.unsubscribe();
+      viewContainerRef.clear();
+    });
+
+  }
+
+  handleAlertClose() {
+    this.errorMessage = "";
   }
 }
